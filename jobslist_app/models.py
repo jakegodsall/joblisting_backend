@@ -26,11 +26,17 @@ class Company(models.Model):
 
 
 class Location(models.Model):
-    city = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
+    city = models.CharField(max_length=50, blank=True, default='')
+    country = models.CharField(max_length=50, blank=True, default='')
     is_remote = models.BooleanField(default=False)
 
     def __str__(self):
+        if self.is_remote:
+            return 'Remote'
+        elif self.city.strip() == '' and self.country.strip() == '':
+            return 'Worldwide'
+        elif self.city.strip() == '':
+            return self.country
         return f'{self.city}, {self.country}'
 
 
@@ -45,9 +51,11 @@ class JobOffer(models.Model):
     posted_at = models.DateTimeField()
     contract = models.CharField(max_length=50)
     location = models.OneToOneField(Location, on_delete=models.CASCADE)
-    languages = models.ForeignKey(
-        ProgrammingLanguage, on_delete=models.CASCADE, blank=True, null=True)
-    # tools
+    languages = models.ManyToManyField(
+        ProgrammingLanguage)
+    tools = models.ManyToManyField(Tools)
 
     def __str__(self):
-        return f'{self.role}, {self.company}'
+        programming_langages = ', '.join(
+            [lang.name for lang in self.languages.all()])
+        return f'{self.role}, {self.company} ({programming_langages})'

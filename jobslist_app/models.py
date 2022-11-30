@@ -3,6 +3,27 @@ from django.db import models
 # Create your models here.
 
 
+class Contract(models.Model):
+    contract = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.contract
+
+
+class Level(models.Model):
+    level = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.level
+
+
+class Role(models.Model):
+    role = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.role
+
+
 class ProgrammingLanguage(models.Model):
     name = models.CharField(max_length=50)
 
@@ -19,7 +40,7 @@ class Tools(models.Model):
 
 class Company(models.Model):
     name = models.CharField(max_length=50)
-    # logo = models. NEED TO LEARN HOW TO ADD IMAGES
+    logo = models.FileField(upload_to="company-logos", null=True)
 
     def __str__(self):
         return self.name
@@ -36,7 +57,7 @@ class Location(models.Model):
         elif self.city.strip() == '' and self.country.strip() == '':
             return 'Worldwide'
         elif self.city.strip() == '':
-            return self.country
+            return self.country + ' only'
         return f'{self.city}, {self.country}'
 
 
@@ -46,14 +67,14 @@ class JobOffer(models.Model):
     is_new = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     position = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
-    level = models.CharField(max_length=30)
+    role = models.OneToOneField(Role, on_delete=models.CASCADE)
+    level = models.OneToOneField(Level, on_delete=models.CASCADE)
     posted_at = models.DateTimeField()
-    contract = models.CharField(max_length=50)
+    contract = models.OneToOneField(Contract, on_delete=models.CASCADE)
     location = models.OneToOneField(Location, on_delete=models.CASCADE)
     languages = models.ManyToManyField(
         ProgrammingLanguage)
-    tools = models.ManyToManyField(Tools)
+    tools = models.ManyToManyField(Tools, null=True)
 
     def __str__(self):
         programming_langages = ', '.join(

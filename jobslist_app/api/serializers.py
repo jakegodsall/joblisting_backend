@@ -28,7 +28,7 @@ class ProgrammingLanguageSerializer(serializers.ModelSerializer):
 
 class ToolsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tools
+        model = Tool
         fields = '__all__'
 
 

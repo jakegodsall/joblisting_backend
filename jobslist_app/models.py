@@ -11,6 +11,7 @@ class Contract(models.Model):
 
 
 class Level(models.Model):
+
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -31,7 +32,7 @@ class ProgrammingLanguage(models.Model):
         return self.name
 
 
-class Tools(models.Model):
+class Tool(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -39,6 +40,9 @@ class Tools(models.Model):
 
 
 class Company(models.Model):
+    class Meta:
+        verbose_name_plural = 'Companies'
+
     name = models.CharField(max_length=50)
     logo = models.FileField(upload_to="company-logos", null=True)
 
@@ -74,7 +78,7 @@ class JobOffer(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     languages = models.ManyToManyField(
         ProgrammingLanguage)
-    tools = models.ManyToManyField(Tools, blank=True)
+    tools = models.ManyToManyField(Tool, blank=True)
 
     def __str__(self):
         programming_langages = ', '.join(

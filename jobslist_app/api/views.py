@@ -73,11 +73,11 @@ class ProgrammingLanguagesListAV(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ToolsListAV(APIView):
+class ToolListAV(APIView):
     """List all development tools"""
 
     def get(self, request):
-        tools = Tools.objects.all()
+        tools = Tool.objects.all()
         serializer = ToolsSerializer(tools, many=True)
         return Response(serializer.data)
 

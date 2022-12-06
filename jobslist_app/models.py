@@ -4,24 +4,24 @@ from django.db import models
 
 
 class Contract(models.Model):
-    contract = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.contract
+        return self.name
 
 
 class Level(models.Model):
-    level = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.level
+        return self.name
 
 
 class Role(models.Model):
-    role = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.role
+        return self.name
 
 
 class ProgrammingLanguage(models.Model):
@@ -67,14 +67,14 @@ class JobOffer(models.Model):
     is_new = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     position = models.CharField(max_length=100)
-    role = models.OneToOneField(Role, on_delete=models.CASCADE)
-    level = models.OneToOneField(Level, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
     posted_at = models.DateTimeField()
-    contract = models.OneToOneField(Contract, on_delete=models.CASCADE)
-    location = models.OneToOneField(Location, on_delete=models.CASCADE)
+    contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     languages = models.ManyToManyField(
         ProgrammingLanguage)
-    tools = models.ManyToManyField(Tools, null=True)
+    tools = models.ManyToManyField(Tools, blank=True)
 
     def __str__(self):
         programming_langages = ', '.join(

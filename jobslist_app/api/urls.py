@@ -1,13 +1,19 @@
 from django.urls import path
+
+from rest_framework.routers import SimpleRouter
+
 from jobslist_app.api.views import *
 
-urlpatterns = [
-    path('contracts/', ContractListAV.as_view()),
-    path('levels/', LevelListAV.as_view()),
-    path('roles/', RoleListAV.as_view()),
-    path('languages/', ProgrammingLanguagesListAV.as_view()),
-    path('tools/', ToolListAV.as_view()),
-    path('locations/', LocationListAV.as_view()),
-    path('jobs/', JobOfferListAV.as_view())
+router = SimpleRouter(trailing_slash=False)
 
-]
+router.register('contract/', ContractView, basename='contract')
+router.register('level/', LevelView, basename='level')
+router.register('role/', RoleView, basename='role')
+router.register('programming-language/', ProgrammingLanguageView,
+                basename='programminglanguage')
+router.register('tool/', ToolView, basename='tool')
+router.register('company/', CompanyView, basename='company')
+router.register('location/', LocationView, basename='location')
+router.register('joboffer/', JobOfferView, basename='joboffer')
+
+urlpatterns = router.urls
